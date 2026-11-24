@@ -41,3 +41,20 @@ jobs:
         env:
           PYTHONPATH: tools
         run: python -m unittest -v tools.test_release_kit tools.test_public_hygiene
+
+  windows-native:
+    name: Windows source-only C++ tests
+    runs-on: windows-2025
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Configure standalone Windows x64 tests
+        run: cmake -S tools/ci -B build/windows-tests -A x64
+      - name: Compile release configuration
+        run: cmake --build build/windows-tests --config Release --parallel 2
+      - name: Run Windows C++ tests
+        run: ctest --test-dir build/windows-tests -C Release --output-on-failure --no-tests=error
+      - name: Verify unchanged rebuild
+        run: cmake --build build/windows-tests --config Release --parallel 2
