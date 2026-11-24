@@ -1,0 +1,43 @@
+# Source-only synthetic tests and incremental C++ compilation; no proprietary media.
+name: Regression & incremental C++ build
+'on':
+  pull_request:
+  push:
+    branches: ["publish/public-safe"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: regression-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-only-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      SCCACHE_GHA_ENABLED: "true"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - name: Install sccache
+        uses: mozilla-actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba # v0.0.11
+      - name: Configure standalone C++ tests
+        run: >-
+          cmake -S tools/ci -B build/source-only-tests -G Ninja
+          -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++
+          -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
+      - name: Compile with sccache
+        run: cmake --build build/source-only-tests --parallel 2
+      - name: Run C++ regression tests
+        run: ctest --test-dir build/source-only-tests --output-on-failure
+      - name: Validate release packaging and public-source hygiene
+        env:
+          PYTHONPATH: tools
+        run: python -m unittest -v tools.test_release_kit tools.test_public_hygiene
