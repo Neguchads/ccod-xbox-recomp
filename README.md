@@ -211,3 +211,9 @@ A tradução e a dublagem PT-BR são de HNNEWGAMES, STR Brasil, MATTH dubs e Os 
 O port é experimental e a campanha inteira não foi validada. O que foi validado no jogo, o que só passou nos testes e o que é experimental por natureza está em [Recursos experimentais e estado](docs/GUIDE.md#recursos-experimentais-e-estado). Quatro mapas sem teleporte ainda não têm nome.
 
 Ainda não foi escolhida uma licença para as alterações deste projeto: o código fica visível, mas isso não concede permissão de reutilização. Partes do runtime derivadas do XboxXBERecomp seguem o aviso MIT em [LICENSES/XboxXBERecomp-MIT.txt](LICENSES/XboxXBERecomp-MIT.txt); o SDK e as demais dependências mantêm suas licenças próprias.
+
+## Automação de CI e distribuição — Etapa 2
+
+As verificações de navegador, as propostas de versão e os artefatos de
+integridade estão descritos em [docs/CI_AUTOMATION.md](docs/CI_AUTOMATION.md).
+A publicação de releases permanece sujeita a revisão humana.
