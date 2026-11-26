@@ -1,6 +1,9 @@
 # Castlevania: Curse of Darkness Recomp
 
-[![Verified developer on RecompStore](https://recompstore.com/assets/press/verified-dark.svg)](https://recompstore.com/dev/neguchads)
+<p align="center">
+  <a href="https://recomplauncher.com/game/castlevania-cod-recomp"><picture><source media="(prefers-color-scheme: dark)" srcset="https://recomplauncher.com/assets/press/launcher/badge-light.svg"><img src="https://recomplauncher.com/assets/press/launcher/badge-dark.svg" alt="Get it on RecompLauncher" height="48"></picture></a>
+  <a href="https://recompstore.com/dev/neguchads"><img src="https://recompstore.com/assets/press/verified-dark.svg" alt="Verified developer on RecompStore" height="48"></a>
+</p>
 
 English · [Português (Brasil)](#pt-br)
 
