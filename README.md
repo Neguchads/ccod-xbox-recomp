@@ -1,5 +1,7 @@
 # Castlevania: Curse of Darkness Recomp
 
+[![Verified developer on RecompStore](https://recompstore.com/assets/press/verified-dark.svg)](https://recompstore.com/dev/neguchads)
+
 English · [Português (Brasil)](#pt-br)
 
 **Download:** game port in [Releases](../../releases) (no game files: bring your own Xbox copy) · optional packs (HD4K, PT-BR, PS2 buttons) in the [Google Drive folder](https://drive.google.com/drive/folders/14RMjeEP5_lL7bLUTY70CBQKBv3nOjcJk). Steps: [Download and play](#download-and-play-no-build).
