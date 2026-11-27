@@ -517,9 +517,9 @@ std::optional<fs::path> ModTexture(uint64_t hash) {
             if(SafeChild(Root()/"mods",textures))
                 for(const auto& entry:fs::directory_iterator(textures,ec)) {
                     if(entry.is_symlink(ec) || !entry.is_regular_file(ec)) continue;
-                    // DDS BC7 primeiro (comprimido na placa); BMP continua aceito.
+                    // Na mesma pasta: DDS BC7 > PNG > BMP; prioridade do PT-BR continua acima do formato.
                     const auto file=texture_lookup::ParseTextureFile(entry.path().filename().string());
-                    if(file) index.Add(file->hash,file->dds,entry.path());
+                    if(file) index.Add(file->hash,file->priority,entry.path());
                 }
             index.NextFolder();
         };

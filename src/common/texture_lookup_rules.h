@@ -10,14 +10,16 @@ namespace texture_lookup {
 struct TextureFile {
     uint64_t hash = 0;
     bool dds = false;
+    uint32_t priority = 0;
 };
-// "0123456789ABCDEF.dds" ou ".bmp", 16 digitos hex; qualquer outro nome fica fora do pacote
+// 16 digitos hex + .dds/.png/.bmp; nomes PCSX2 ainda exigem o conversor existente.
 inline std::optional<TextureFile> ParseTextureFile(std::string_view name) {
     if (name.size() != 20 || name[16] != '.') return std::nullopt;
     auto lower = [](char c) { return c >= 'A' && c <= 'Z' ? char(c - 'A' + 'a') : c; };
     const char e0 = lower(name[17]), e1 = lower(name[18]), e2 = lower(name[19]);
     const bool dds = e0 == 'd' && e1 == 'd' && e2 == 's';
-    if (!dds && !(e0 == 'b' && e1 == 'm' && e2 == 'p')) return std::nullopt;
+    const bool png = e0 == 'p' && e1 == 'n' && e2 == 'g';
+    if (!dds && !png && !(e0 == 'b' && e1 == 'm' && e2 == 'p')) return std::nullopt;
     uint64_t hash = 0;
     for (int i = 0; i < 16; i++) {
         const char c = lower(name[size_t(i)]);
@@ -25,17 +27,21 @@ inline std::optional<TextureFile> ParseTextureFile(std::string_view name) {
         if (digit < 0) return std::nullopt;
         hash = hash << 4 | uint64_t(digit);
     }
-    return TextureFile{hash, dds};
+    return TextureFile{hash, dds, dds ? 2u : png ? 1u : 0u};
 }
-// pastas em ordem de prioridade; na mesma pasta o DDS (BC7 na placa) vence o BMP
+// Pastas em ordem de prioridade; na mesma pasta DDS > PNG > BMP, independente da ordem de enumeracao.
 template <class Path>
 class Index {
 public:
     void Add(uint64_t hash, bool dds, Path path) {
+        Add(hash, dds ? 2u : 0u, std::move(path));
+    }
+    void Add(uint64_t hash, uint32_t priority, Path path) {
         // procura antes de mover: o Entry de um try_emplace ja levaria o caminho mesmo sem inserir
         auto it = entries_.find(hash);
-        if (it == entries_.end()) entries_.emplace(hash, Entry{std::move(path), folder_, dds});
-        else if (it->second.folder == folder_ && dds && !it->second.dds) it->second = Entry{std::move(path), folder_, dds};
+        if (it == entries_.end()) entries_.emplace(hash, Entry{std::move(path), folder_, priority});
+        else if (it->second.folder == folder_ && priority > it->second.priority)
+            it->second = Entry{std::move(path), folder_, priority};
     }
     void NextFolder() { folder_++; }
     const Path* Find(uint64_t hash) const {
@@ -48,7 +54,7 @@ private:
     struct Entry {
         Path path;
         int folder;
-        bool dds;
+        uint32_t priority;
     };
     std::unordered_map<uint64_t, Entry> entries_;
     int folder_ = 0;

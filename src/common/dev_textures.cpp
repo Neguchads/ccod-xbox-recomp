@@ -1,4 +1,6 @@
 #include "dev_runtime.h"
+#include "texture_pack_png.h"
+#include "texture_pack_mips.h"
 #include "core/log.h"
 #include <array>
 #include <climits>
@@ -22,12 +24,16 @@ std::shared_ptr<const TextureImage> ReplacementTexture(uint64_t hash) {
     if(!path) return image;
     std::error_code ec;
     auto length=std::filesystem::file_size(*path,ec);
-    if(!ec && length>=54 && length<=70*1024*1024) {
+    if(!ec && length>=8 && length<=70*1024*1024) {
         std::ifstream input(*path,std::ios::binary);
         std::vector<uint8_t> bytes(size_t(length),uint8_t(0));
         if(input.read(reinterpret_cast<char*>(bytes.data()),std::streamsize(bytes.size()))) {
-            if(auto decoded=DecodePackTexture(bytes)) {image=std::make_shared<TextureImage>(std::move(*decoded));texture_replacements.fetch_add(1);}
-            else LOGE("mods: invalid texture %s (BMP 24/32 bits or DDS BC7_UNORM)",path->filename().string().c_str());
+            if(auto decoded=IsPackPng(bytes)?DecodePackPng(bytes):DecodePackTexture(bytes)) {
+                if(BuildPackMipmaps(*decoded)) {
+                    image=std::make_shared<TextureImage>(std::move(*decoded));texture_replacements.fetch_add(1);
+                } else LOGE("mods: failed to build texture mipmaps %s",path->filename().string().c_str());
+            }
+            else LOGE("mods: invalid texture %s (PNG, BMP 24/32 bits or DDS BC7_UNORM)",path->filename().string().c_str());
         }
     }
     // arquivo invalido tambem fica: sem reler do disco a cada desenho

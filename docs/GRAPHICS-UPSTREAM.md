@@ -9,7 +9,10 @@ This is an integration backlog, not a list of delivered features.
 Stage 1 is implemented: compiled shaders are stored under `cache/shaders` beside
 the executable. `XBE_SHADER_CACHE` can select another folder. Cache failures fall
 back to compilation; the cache is disposable and contains compiled host shaders,
-not saves. No in-game performance or visual verification has been performed.
+not saves. On 2026-11-27 the owner reported normal gameplay after the cache change; no performance gain was measured.
+
+
+Stage 4a adds Xbox-hash PNG textures through WIC and generates mipmaps for BMP/PNG once on load. DDS data and Portuguese pack priority are preserved. PCSX2 filename matching, normal/ORM/height maps and material shading remain pending.
 
 ## Scope and order
 
@@ -53,7 +56,10 @@ Esta é a fila de integração, não uma lista de recursos entregues.
 Etapa 1 implementada: shaders compilados ficam em `cache/shaders`, ao lado do
 executável. `XBE_SHADER_CACHE` permite escolher outra pasta. Falha no cache volta
 à compilação; ele é descartável e contém shaders do host, não saves. Desempenho
-e resultado visual ainda não foram verificados em jogo.
+ainda não foi medido. Em 27/11/2026 o dono relatou que o jogo rodou normalmente após a mudança do cache.
+
+
+Etapa 4a adiciona PNG pelo hash Xbox via WIC e gera mipmaps de BMP/PNG uma vez no carregamento. DDS e prioridade do pacote PT-BR ficam preservados. Pareamento de nomes PCSX2, mapas normal/ORM/altura e iluminação de materiais continuam pendentes.
 
 ## Escopo e ordem
 
