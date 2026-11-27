@@ -34,6 +34,7 @@
 #include "hud_render_rules.h"
 #include "final_copy_rules.h"
 #include "shadow_volume_rules.h"
+#include "shader_disk_cache.h"
 #include "multisample_rules.h"
 #include "frame_skip_rules.h"
 #include "texture_lookup_rules.h"
@@ -1364,12 +1365,18 @@ ID3DBlob* D3D12Backend::Compile(const std::string& src, const char* entry, const
     hash = Hash(src.data(), src.size(), entry_seed);
     auto it = blobs_.find(hash);
     if (it != blobs_.end()) return it->second.Get();
+    constexpr uint32_t flags = D3DCOMPILE_OPTIMIZATION_LEVEL1;
+    const wchar_t* cache_override = _wgetenv(L"XBE_SHADER_CACHE");
+    const auto cache_dir = cache_override && *cache_override ? std::filesystem::path(cache_override)
+        : app::ExeDir() / "cache" / "shaders";
     ComPtr<ID3DBlob> code;
     ComPtr<ID3DBlob> err;
     PerfScope perf_compile{g_perf.compile};
-    g_perf.shaders++;
-    HRESULT hr = D3DCompile(src.data(), src.size(), nullptr, nullptr, nullptr, entry, profile,
-                            D3DCOMPILE_OPTIMIZATION_LEVEL1, 0, &code, &err);
+    bool cached = false;
+    HRESULT hr = cod_graphics::CompileShaderCached(cache_dir, src.data(), src.size(), entry, profile,
+                            flags, &code, &err, cached);
+    if (!cached) g_perf.shaders++;
+    else LOG_FIRST(4, "d3d12: shader disk cache hit %016llx", (unsigned long long)hash);
     if (FAILED(hr)) {
         LOGE("d3d12: %s compile failed: %s", profile, err ? static_cast<const char*>(err->GetBufferPointer()) : "?");
         LOGE("%s", src.c_str());
