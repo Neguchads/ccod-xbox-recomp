@@ -222,3 +222,7 @@ Ainda não foi escolhida uma licença para as alterações deste projeto: o cód
 As verificações de navegador, as propostas de versão e os artefatos de
 integridade estão descritos em [docs/CI_AUTOMATION.md](docs/CI_AUTOMATION.md).
 A publicação de releases permanece sujeita a revisão humana.
+
+## Final release verification
+
+[AutoVerify](docs/AUTOVERIFY.md) is an optional final stable release-only integrity and VirusTotal hash lookup. No development builds or PRs are queried.
