@@ -10,7 +10,7 @@ int main() {
     stem = ParseTextureFile("ffffffffffffffff.BMP");
     if (!stem || stem->hash != ~0ull || stem->dds) return 2;
     if (ParseTextureFile("00A1B2C3D4E5F60.dds") || ParseTextureFile("00A1B2C3D4E5F6070.dds") ||
-        ParseTextureFile("00A1B2C3D4E5F60G.dds") || ParseTextureFile("00A1B2C3D4E5F607.png") ||
+        ParseTextureFile("00A1B2C3D4E5F60G.dds") || ParseTextureFile("00A1B2C3D4E5F607.jpg") ||
         ParseTextureFile("00A1B2C3D4E5F607.dds.bak") || ParseTextureFile("")) return 3;
     // Indice: primeira pasta vence (PT-BR antes dos packs); na mesma pasta DDS vence BMP.
     // caminhos longos (na heap): um move indevido deixaria a entrada vazia
@@ -26,6 +26,20 @@ int main() {
     dds_first.Add(5, true, dds);
     dds_first.Add(5, false, bmp);
     if (!dds_first.Find(5) || *dds_first.Find(5) != dds) return 9;
+    const auto png = ParseTextureFile("00A1B2C3D4E5F607.PNG");
+    if (!png || png->hash != 0x00A1B2C3D4E5F607ull || png->dds || png->priority != 1) return 10;
+    for (const auto& order : {std::string("012"), std::string("021"), std::string("102"),
+                            std::string("120"), std::string("201"), std::string("210")}) {
+        Index<std::string> formats;
+        for (char rank : order) formats.Add(5, uint32_t(rank - '0'), std::string(1, rank));
+        if (!formats.Find(5) || *formats.Find(5) != "2") return 11;
+        formats.NextFolder();
+        formats.Add(5, 2u, "other DDS");
+        if (*formats.Find(5) != "2") return 12;
+    }
+    Index<std::string> translated;
+    translated.Add(5, 1u, "PTBR PNG"); translated.NextFolder(); translated.Add(5, 2u, "HD DDS");
+    if (!translated.Find(5) || *translated.Find(5) != "PTBR PNG") return 13;
     // Hash por quadro: o mesmo quadro reaproveita, quadro novo calcula de novo.
     FrameMemo memo;
     int computed = 0;

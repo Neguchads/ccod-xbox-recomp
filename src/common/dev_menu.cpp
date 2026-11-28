@@ -845,7 +845,7 @@ void ModsPage() {
     ImGui::TextWrapped("%s",Tr("Se dois mods substituirem o mesmo arquivo, o nome em ordem alfabetica mais alta tem prioridade. So arquivos do disco do jogo sao substituidos; saves ficam fora dessa camada."));
     Toggle("Exportar texturas para criar um pack HD", texture_dump);
     ImGui::Text(Tr("Texturas exportadas: %u | Substituicoes HD carregadas: %u"),texture_exports.load(),texture_replacements.load());
-    ImGui::TextWrapped("%s",Tr("Exporta ate 200 texturas por execucao para texture-dumps. Packs usam arquivos BMP nomeados pelo hash da textura; veja MODDING.md."));
+    ImGui::TextWrapped("%s",Tr("Exporta ate 200 texturas por execucao para texture-dumps. Packs usam BMP, PNG ou DDS nomeados pelo hash da textura; veja MODDING.md."));
 }
 void CheatsPage() {
     Heading("Cheats", "Patches de memoria para esta versao de Xbox, com valor esperado e reversao.");

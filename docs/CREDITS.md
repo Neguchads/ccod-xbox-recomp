@@ -2,6 +2,11 @@
 
 English · [Português (Brasil)](#pt-br)
 
+Persistent shader caching is adapted from the MIT-licensed SDK patch in
+[jmafort/CastlevaniaCOD-PC](https://github.com/jmafort/CastlevaniaCOD-PC), revision
+`00408f145232c2593fef47499979adac5024ba98`. The original XboxXBERecomp notice is
+preserved in [graphics-cache-MIT.txt](../LICENSES/graphics-cache-MIT.txt).
+
 This recomp would have no translation, dub or high-resolution textures without the work
 of the people below. The project only adapts that work to the Xbox version; the authorship is
 theirs. If you use the PT-BR translation or the HD pack, visit the original pages and support the authors.
@@ -78,6 +83,11 @@ or missing, open an issue to fix it.
 <a id="pt-br"></a>
 
 # Créditos
+
+O cache persistente de shaders foi adaptado do patch do SDK em MIT do
+[jmafort/CastlevaniaCOD-PC](https://github.com/jmafort/CastlevaniaCOD-PC), revisão
+`00408f145232c2593fef47499979adac5024ba98`. O aviso original do XboxXBERecomp
+está preservado em [graphics-cache-MIT.txt](../LICENSES/graphics-cache-MIT.txt).
 
 [English](#credits) · Português (Brasil)
 

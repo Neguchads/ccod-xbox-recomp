@@ -25,6 +25,10 @@ if errorlevel 1 exit /b 1
 if errorlevel 1 exit /b 1
 .local\test_shadow_volume.exe
 if errorlevel 1 exit /b 1
+"%CLANGXX%" -std=c++20 -Wall -Wextra -Werror tools\test_shader_disk_cache.cpp -o .local\test_shader_disk_cache.exe -ld3dcompiler -ladvapi32
+if errorlevel 1 exit /b 1
+.local\test_shader_disk_cache.exe
+if errorlevel 1 exit /b 1
 "%CLANGXX%" -std=c++20 -Wall -Wextra -Werror tools\test_final_copy.cpp -o .local\test_final_copy.exe
 if errorlevel 1 exit /b 1
 .local\test_final_copy.exe
@@ -55,6 +59,14 @@ if errorlevel 1 exit /b 1
 "%CLANGXX%" -std=c++20 -Wall -Wextra -Werror tools\test_texture_pack.cpp -o .local\test_texture_pack.exe
 if errorlevel 1 exit /b 1
 .local\test_texture_pack.exe
+if errorlevel 1 exit /b 1
+"%CLANGXX%" -std=c++20 -Wall -Wextra -Werror tools\test_texture_pack_mips.cpp -o .local\test_texture_pack_mips.exe
+if errorlevel 1 exit /b 1
+.local\test_texture_pack_mips.exe
+if errorlevel 1 exit /b 1
+"%CLANGXX%" -std=c++20 -Wall -Wextra -Werror tools\test_texture_pack_png.cpp -o .local\test_texture_pack_png.exe -lwindowscodecs -lole32
+if errorlevel 1 exit /b 1
+.local\test_texture_pack_png.exe
 if errorlevel 1 exit /b 1
 "%CLANGXX%" -std=c++20 -Wall -Wextra -Werror tools\test_report_gallery.cpp -o .local\test_report_gallery.exe
 if errorlevel 1 exit /b 1
